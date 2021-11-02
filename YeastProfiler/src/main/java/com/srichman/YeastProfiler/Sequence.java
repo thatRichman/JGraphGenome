@@ -45,17 +45,27 @@ public class Sequence {
         return cs.toString().toLowerCase();
     }
 
+    /**
+     *
+     * @param seq nucleotide sequence
+     * @param id identifier
+     * @param strict if true, only A/T/G/C/U/N allowed
+     */
     public Sequence(String seq, String id, Boolean strict) {
 
         this.seq = cleanSeq(seq, strict);
         this.id = id;
     }
 
+    // constructor, implicit strict
     public Sequence(String seq, String id) {
         this.seq = cleanSeq(seq, true);
         this.id = id;
     }
 
+    /*
+    Reverse compliment of sequence
+    */
     public String revComp(){
         String rev = new StringBuilder(this.seq).reverse().toString();
         StringBuilder revCompSB = new StringBuilder();
@@ -63,6 +73,11 @@ public class Sequence {
         return revCompSB.toString();
     }
 
+    /** Exhaustive k-mer generation
+     *
+     * @param size length of k-mers to create
+     * @return String Array of k-mers
+     */
     public String[] makeKmers(int size){
         String[] outKmers = new String[this.seq.length() - size + 1];
         for(int i = 0; i <= this.seq.length()-size; i++){

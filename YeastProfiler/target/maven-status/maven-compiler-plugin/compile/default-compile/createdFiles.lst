@@ -1,0 +1,5 @@
+com\srichman\YeastProfiler\KmerMapper.class
+com\srichman\YeastProfiler\CompactDeBruijnGraph.class
+com\srichman\YeastProfiler\StdDeBruijnGraph.class
+com\srichman\YeastProfiler\DeBruijnGraph.class
+com\srichman\YeastProfiler\DeBruijnFactory.class

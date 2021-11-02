@@ -15,9 +15,17 @@ public class SequenceTest extends TestCase {
             new Sequence(badStr, "_");
             fail("badStr did not throw IllegalArgumentException");
         } catch (IllegalArgumentException ex){
+
         }
 
-        assertEquals("aatatagagnngan", new Sequence(okStr, "_").seq);
+        try {
+            Sequence okSeq = new Sequence(okStr, "_", false);
+            assertEquals("aatatagagnngan", okSeq.seq);
+        } catch (IllegalArgumentException ex){
+            fail("okStr threw IllegalArgumentException");
+        }
+
+
     }
 
     public void testRevComp() {
@@ -25,7 +33,7 @@ public class SequenceTest extends TestCase {
     }
 
     public void testMakeKmers() {
-        System.out.println(Arrays.toString(this.testSeq.makeKmers(2)));
+//        System.out.println(Arrays.toString(this.testSeq.makeKmers(2)));
     }
 
 }

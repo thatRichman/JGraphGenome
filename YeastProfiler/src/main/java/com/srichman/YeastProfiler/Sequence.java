@@ -12,7 +12,7 @@ public class Sequence {
     Immutable static Map for complementing nucleotide sequences
      */
     private static final Map<Character, Character> seqMap =
-            (Map<Character, Character>) Map.ofEntries(
+            Map.ofEntries(
                 Map.entry('a', 't'),
                 Map.entry('t', 'a'),
                 Map.entry('g', 'c'),
@@ -30,19 +30,29 @@ public class Sequence {
     private static String cleanSeq(String seq, boolean strict) throws IllegalArgumentException{
         StringBuilder cs = new StringBuilder();
         for(char c : seq.toCharArray()){
-            if(!Character.isLetter(c)){ /* this checks for non-letters */
+            if(!Character.isLetter(c)){ // this checks for non-letters
                 throw new IllegalArgumentException("invalid character in nucleotide sequence");
             }
-            if(strict & !seqMap.containsKey(c)){ /* if strict, this enforces ATGCN */
+            else if(strict & !seqMap.containsKey(c)){ // if strict, this enforces ATGCUN
                 throw new IllegalArgumentException("invalid character in nucleotide sequence");
+            }
+            else if(!seqMap.containsKey(c)){ // strict or not, if not a nucleotide, recode to n
+                cs.append("n");
+            } else {
+                cs.append(c);
             }
         }
-        return seq.toLowerCase();
+        return cs.toString().toLowerCase();
+    }
+
+    public Sequence(String seq, String id, Boolean strict) {
+
+        this.seq = cleanSeq(seq, strict);
+        this.id = id;
     }
 
     public Sequence(String seq, String id) {
-
-        this.seq = cleanSeq(seq);
+        this.seq = cleanSeq(seq, true);
         this.id = id;
     }
 

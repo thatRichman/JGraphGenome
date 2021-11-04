@@ -63,6 +63,10 @@ public class Sequence {
         this.id = id;
     }
 
+    public String toString() {
+        return this.id + System.lineSeparator() + this.seq + System.lineSeparator();
+    }
+
     /*
     Reverse compliment of sequence
     */

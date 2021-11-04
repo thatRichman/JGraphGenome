@@ -1,57 +1,76 @@
 package com.srichman.YeastProfiler;
 
-
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.ByteBuffer;
-import java.nio.channels.FileChannel;
+import java.util.AbstractMap;
 
 /**
- * Parallelized FASTA file reader
+ *  FASTA file reader
  */
 public class FastaReader{
-        private FileChannel channel;
-        private ByteBuffer buffer;
+    private final BufferedReader br;
+    private String currLine;
+    private boolean hasNext;
 
-        // not necessarily the best option
-        private static final String[] validSuffs = {
-                ".fasta",
-                ".fa",
-                ".fa.gz",
-                ".fa.zip",
-                ".fasta.zip",
-                ".fasta.gz",
-                ".fna",
-                ".fna.gz",
-                ".fna.zip"
-        };
-
-        public FastaReader(String fileName) throws IOException {
-            this.openFile(fileName);
+    public FastaReader(String fileName) throws IOException {
+        this.br = new BufferedReader(new FileReader(fileName));
+        this.seekToHeader(); // automatically find first header
+        if(this.currLine == null){
+            // empty or malformed fasta file
+            throw new IOException("FASTA file does not appear to contain any headers");
         }
-
-        public void read(){
-            this.readFromChannel();
-        }
-
-        private void openFile(String fileName) throws IOException {
-            this.channel = new FileInputStream(fileName).getChannel();
-            if(this.channel.size() <= 2e9) {
-                this.buffer = channel.map(
-                        FileChannel.MapMode.READ_ONLY,
-                        0,
-                        this.channel.size()
-                );
-            }
-        }
-
-        private void readFromChannel() {
-            while (this.buffer.hasRemaining()) {
-                System.out.println((char)this.buffer.get());
-            }
-        }
-
+        this.hasNext = true;
     }
+
+//    private void readAllSequences() throws IOException {
+//        String line;
+//        String header;
+//        String sequence;
+//        this.hasNext = true;
+//        while(this.hasNext){
+//            Sequence seq = this.readNext();
+//        }
+//    }
+
+    public AbstractMap.SimpleImmutableEntry<String, String> readNext() throws IOException {
+        String header;
+        String sequence;
+        if(!this.hasNext){
+            return null;
+        }
+        this.seekToHeader();
+        header = this.currLine;
+        if(this.currLine == null) {
+            this.hasNext = false;
+            return null;
+        }
+        sequence = this.readSequence();
+        return new AbstractMap.SimpleImmutableEntry<>(header, sequence);
+    }
+
+    private void seekToHeader() throws IOException {
+        while(((this.currLine = this.br.readLine()) != null) && (!isHeader(this.currLine))){}
+    }
+
+    private String readSequence() throws IOException {
+        StringBuilder sequence = new StringBuilder();
+        while(((this.currLine = this.br.readLine()) != null) && (!isHeader(this.currLine))){
+            if((this.currLine.startsWith("#") || this.currLine.strip().isEmpty())){
+                // skip comment and empty lines
+                continue;
+            }
+            sequence.append(this.currLine);
+            this.br.mark(1000);
+        }
+        this.br.reset();
+        // found next header, return sequence
+        return sequence.toString().strip();
+    }
+
+    private static boolean isHeader(String line){
+        return line.startsWith(">");
+    }
+
 
 }

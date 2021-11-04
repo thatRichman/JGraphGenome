@@ -14,7 +14,7 @@ public class FastaReaderTest {
 //    }
 
     @Test
-    public void testRead() throws IOException {
+    public void testRead() throws Exception {
         FastaReader reader = new FastaReader(fileName);
         AbstractMap.SimpleImmutableEntry<String, String> seq;
         while((seq = reader.readNext()) != null){
@@ -23,7 +23,7 @@ public class FastaReaderTest {
     }
 
     @Test(expected=IOException.class)
-    public void testEmpty() throws IOException {
+    public void testEmpty() throws Exception {
         FastaReader emptyReader = new FastaReader(emptyFile);
     }
 

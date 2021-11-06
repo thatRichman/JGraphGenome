@@ -1,42 +1,78 @@
 package com.srichman.YeastProfiler;
 
+import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class Sequence {
-
-    String seq;
-    String id;
 
     /*
     Immutable static Map for complementing nucleotide sequences
      */
     private static final Map<Character, Character> seqMap =
             Map.ofEntries(
-                Map.entry('a', 't'),
-                Map.entry('t', 'a'),
-                Map.entry('g', 'c'),
-                Map.entry('c', 'g'),
-                Map.entry('u', 'a'),
-                Map.entry('A', 't'),
-                Map.entry('T', 'a'),
-                Map.entry('G', 'c'),
-                Map.entry('C', 'g'),
-                Map.entry('U', 'a'),
-                Map.entry('n', 'n'),
-                Map.entry('N', 'n')
+                    Map.entry('a', 't'),
+                    Map.entry('t', 'a'),
+                    Map.entry('g', 'c'),
+                    Map.entry('c', 'g'),
+                    Map.entry('u', 'a'),
+                    Map.entry('A', 't'),
+                    Map.entry('T', 'a'),
+                    Map.entry('G', 'c'),
+                    Map.entry('C', 'g'),
+                    Map.entry('U', 'a'),
+                    Map.entry('n', 'n'),
+                    Map.entry('N', 'n')
             );
+    private String seq;
+    private String id;
+    private Boolean isCanonical;
 
-    private static String cleanSeq(String seq, boolean strict) throws IllegalArgumentException{
+    public String getSeq(){
+        return this.seq;
+    }
+
+    public String getId(){
+        return this.id;
+    }
+
+    public boolean isCanonical(){
+        return this.isCanonical;
+    }
+
+    /**
+     * @param seq    nucleotide sequence
+     * @param id     identifier
+     * @param canonical if true, will make sequence canonical
+     * @param strict if true, only A/T/G/C/U/N allowed
+     */
+    public Sequence(String seq, String id, Boolean canonical, Boolean strict) {
+
+        String cleanSeq = cleanSeq(seq, strict);
+        if (canonical) {
+            this.seq = makeCanonical(cleanSeq);
+        } else {
+            this.seq = cleanSeq;
+        }
+        this.id = id;
+    }
+
+    // constructor, implicit strict, implicit canonical
+    public Sequence(String seq, String id) {
+        String cleanSeq = cleanSeq(seq, true);
+        this.seq = makeCanonical(cleanSeq);
+        this.id = id;
+    }
+
+    private static String cleanSeq(String seq, boolean strict) throws IllegalArgumentException {
         StringBuilder cs = new StringBuilder();
-        for(char c : seq.toCharArray()){
-            if(!Character.isLetter(c)){ // this checks for non-letters
+        for (char c : seq.toCharArray()) {
+            if (!Character.isLetter(c)) { // this checks for non-letters
                 throw new IllegalArgumentException("invalid character in nucleotide sequence");
-            }
-            else if(strict & !seqMap.containsKey(c)){ // if strict, this enforces ATGCUN
+            } else if (strict & !seqMap.containsKey(c)) { // if strict, this enforces ATGCUN
                 throw new IllegalArgumentException("invalid character in nucleotide sequence");
-            }
-            else if(!seqMap.containsKey(c)){ // strict or not, if not a nucleotide, recode to n
+            } else if (!seqMap.containsKey(c)) { // strict or not, if not a nucleotide, recode to n
                 cs.append("n");
             } else {
                 cs.append(c);
@@ -45,45 +81,61 @@ public class Sequence {
         return cs.toString().toLowerCase();
     }
 
+    public static String revComp(String seq) {
+        String rev = new StringBuilder(seq).reverse().toString();
+        StringBuilder revCompSB = new StringBuilder();
+        rev.chars().forEach(r -> revCompSB.append(seqMap.get((char) r)));
+        return revCompSB.toString();
+    }
+
     /**
+     * Static implementation of makeCanonical
      *
-     * @param seq nucleotide sequence
-     * @param id identifier
-     * @param strict if true, only A/T/G/C/U/N allowed
+     * @param seq DNA string
+     * @return the canonical (lexicographically smallest) form of DNA string
      */
-    public Sequence(String seq, String id, Boolean strict) {
-
-        this.seq = cleanSeq(seq, strict);
-        this.id = id;
+    public static String makeCanonical(String seq) {
+        String rev = revComp(seq);
+        if (seq.compareTo(rev) > 0) {
+            return rev;
+        }
+        return seq;
     }
 
-    // constructor, implicit strict
-    public Sequence(String seq, String id) {
-        this.seq = cleanSeq(seq, true);
-        this.id = id;
+    public String toString() {
+        return this.id + System.lineSeparator() + this.seq + System.lineSeparator();
     }
 
-    /*
-    Reverse compliment of sequence
-    */
-    public String revComp(){
+    /**
+     * Reverse complement of DNA sequence
+     * @return String
+     */
+    public String revComp() {
         String rev = new StringBuilder(this.seq).reverse().toString();
         StringBuilder revCompSB = new StringBuilder();
         rev.chars().forEach(r -> revCompSB.append(seqMap.get((char) r)));
         return revCompSB.toString();
     }
 
-    /** Exhaustive k-mer generation
-     *
-     * @param size length of k-mers to create
-     * @return String Array of k-mers
+    /**
+     * If the reverse complement of this.seq is lexicographically smaller, replace this.seq with rev comp
      */
-    public String[] makeKmers(int size){
-        String[] outKmers = new String[this.seq.length() - size + 1];
-        for(int i = 0; i <= this.seq.length()-size; i++){
-            outKmers[i] = this.seq.substring(i, i+size);
+    public void makeCanonical() {
+        String rev = this.revComp();
+        boolean isCan = this.seq.compareTo(rev) < 0;
+        if (!isCan) {
+            this.seq = rev;
         }
-        return(outKmers);
+        this.isCanonical = true;
+    }
+
+    public String[] makeKmers(int k){
+        int totKmer = this.seq.length() - k + 1;
+        String[] outKmers = new String[totKmer];
+        for(int i = 0; i < totKmer; i++){
+            outKmers[i] = this.seq.substring(i, i+k);
+        }
+        return outKmers;
     }
 
 }

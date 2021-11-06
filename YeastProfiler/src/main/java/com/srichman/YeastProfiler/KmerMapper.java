@@ -24,7 +24,7 @@ public class KmerMapper {
     }
 
     /**
-     * integer hash function from minimap
+     * integer hash function from minimap https://github.com/lh3/minimap2/blob/master/sketch.c
      * @param x sequence to hash
      * @param bits number of bits in x
      * @return integer hash of x

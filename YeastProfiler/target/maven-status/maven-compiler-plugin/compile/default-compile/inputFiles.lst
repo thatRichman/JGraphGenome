@@ -1,6 +1,9 @@
-C:\Users\richm\Documents\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\StdDeBruijnGraph.java
-C:\Users\richm\Documents\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\CompactDeBruijnGraph.java
-C:\Users\richm\Documents\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\KmerMapper.java
-C:\Users\richm\Documents\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\YeastProfiler.java
-C:\Users\richm\Documents\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\DeBruijnGraph.java
-C:\Users\richm\Documents\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\DeBruijnFactory.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\AbstractDeBruijnGraph.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\Visualize.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\YeastProfiler.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\SimpleDeBruijnGraph.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\KmerMapper.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\FastaReader.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\main.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\Sequence.java
+C:\Users\richm\IdeaProjects\YeastProfiler\YeastProfiler\src\main\java\com\srichman\YeastProfiler\BitSequence.java

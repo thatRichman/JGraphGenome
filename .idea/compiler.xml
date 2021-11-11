@@ -6,11 +6,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="YeastProfiler" />
+        <module name="JGraphGenome" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="17">
-      <module name="YeastProfiler" target="16" />
+      <module name="JGraphGenome" target="16" />
     </bytecodeTargetLevel>
   </component>
 </project>

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/YeastProfiler/YeastProfiler.iml" filepath="$PROJECT_DIR$/YeastProfiler/YeastProfiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/JGraphGenome/JGraphGenome.iml" filepath="$PROJECT_DIR$/JGraphGenome/JGraphGenome.iml" />
     </modules>
   </component>
 </project>
